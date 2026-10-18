@@ -1,0 +1,6 @@
+{
+  "appId": "vn.nhacmix.player",
+  "appName": "NhacMix",
+  "webDir": "www",
+  "server": { "androidScheme": "https", "allowNavigation": ["www.youtube.com", "youtube.com", "www.youtube-nocookie.com"] }
+}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#10131c"><meta name="description" content="NhacMix - gom YouTube và nhạc riêng vào một nơi."><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg"><link rel="apple-touch-icon" href="icon-512.png"><link rel="stylesheet" href="styles.css"><title>NhacMix — Không gian âm nhạc</title>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">♫</div><div><b>NhacMix</b><small>YOUR SOUND SPACE</small></div></div>
+    <div class="nav-label">THƯ VIỆN</div>
+    <button class="nav active" data-view="home"><span>⌂</span> Khám phá</button>
+    <button class="nav" data-view="youtube"><span>▷</span> YouTube</button>
+    <button class="nav" data-view="local"><span>♫</span> Nhạc của tôi</button>
+    <button class="nav" data-view="playlists"><span>▤</span> Playlist</button>
+    <button class="nav" data-view="history"><span>◷</span> Nghe gần đây</button>
+    <div class="sidebar-note"><span class="note-icon">✦</span><b>Âm nhạc của riêng bạn</b><p>Lưu playlist và lịch sử ngay trên thiết bị.</p></div>
+    <div class="sidebar-bottom">NHACMIX <span>•</span> PHIÊN BẢN 1.0</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div class="mobile-brand"><span class="brand-mark">♫</span> NhacMix</div><div class="search-wrap"><span>⌕</span><input id="search" placeholder="Tìm trong thư viện của bạn…" aria-label="Tìm kiếm"></div><button class="round-btn" id="themeBtn" title="Đổi giao diện">☼</button><button class="profile" title="NhacMix">N</button></header>
+    <section class="content" id="content">
+      <section class="hero"><div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> KHÔNG GIAN ÂM NHẠC CỦA BẠN</div><h1>Mood hôm nay,<br><em>giai điệu của bạn.</em></h1><p>Thêm link YouTube hoặc mở nhạc trong máy. Tất cả yêu thích và lịch sử nghe được lưu trên thiết bị.</p><div class="hero-actions"><button class="primary" id="heroAddYoutube">＋ Thêm link YouTube</button><button class="secondary" id="heroAddFiles">↑ Thêm nhạc từ máy</button></div></div><div class="hero-art"><div class="orb orb-one"></div><div class="orb orb-two"></div><div class="disc"><div class="disc-label">♫</div></div><div class="sound-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="art-caption">PLAY YOUR WAY</span></div></section>
+      <div class="section-heading"><div><div class="eyebrow muted">DÀNH CHO BẠN</div><h2 id="viewTitle">Bộ sưu tập của bạn</h2></div><button class="text-btn" id="viewAll">Xem tất cả <span>→</span></button></div>
+      <div class="stats-row"><div class="stat-card"><div class="stat-icon purple">♫</div><div><strong id="statTracks">0</strong><small>Bài nhạc đã lưu</small></div></div><div class="stat-card"><div class="stat-icon teal">▤</div><div><strong id="statPlaylists">0</strong><small>Playlist</small></div></div><div class="stat-card"><div class="stat-icon orange">◷</div><div><strong id="statHistory">0</strong><small>Đã nghe gần đây</small></div></div></div>
+      <div id="notice" class="notice hidden" role="status"></div><div id="trackList" class="track-list"></div>
+      <section class="empty-state" id="emptyState"><div class="empty-icon">♫</div><h3>Không gian này đang chờ giai điệu</h3><p>Thêm một link YouTube hoặc chọn file nhạc từ điện thoại để bắt đầu.</p><div><button class="primary" id="emptyYoutube">Thêm link YouTube</button> <button class="secondary" id="emptyFiles">Chọn file nhạc</button></div></section>
+      <div class="section-heading lower-heading"><div><div class="eyebrow muted">BẮT ĐẦU NHANH</div><h2>Thêm nhạc theo cách của bạn</h2></div></div>
+      <div class="source-cards"><button class="source-card" id="cardYoutube"><span class="source-icon youtube-icon">▷</span><span><b>Link YouTube</b><small>Dùng trình phát YouTube chính thức</small></span><span class="card-arrow">↗</span></button><button class="source-card" id="cardLocal"><span class="source-icon local-icon">♫</span><span><b>Nhạc & video trong thiết bị</b><small>MP3, M4A, MP4, WebM và định dạng hỗ trợ</small></span><span class="card-arrow">↗</span></button></div>
+      <section class="storage-check"><button class="secondary" id="checkStorage">Kiểm tra quyền truy cập & bộ nhớ</button><p id="storageStatus" role="status">Chọn tệp bằng bộ chọn tệp của thiết bị. NhacMix chỉ truy cập các tệp bạn tự chọn.</p></section><footer>NhacMix không chặn quảng cáo hoặc vượt giới hạn của YouTube. Nội dung YouTube phát qua trình phát chính thức.</footer>
+    </section>
+  </main>
+</div>
+<div class="player-bar" id="playerBar"><div class="now-playing"><div class="mini-cover" id="miniCover">♫</div><div class="now-text"><b id="nowTitle">Chưa phát bài nào</b><small id="nowSource">Chọn một bài để bắt đầu</small></div><button id="favoriteBtn" class="tiny-icon" title="Yêu thích">♡</button></div><div class="player-controls"><div class="control-buttons"><button id="prevBtn" title="Bài trước">⏮</button><button id="playBtn" class="play-main" title="Phát">▶</button><button id="nextBtn" title="Bài tiếp">⏭</button><button id="stopBtn" title="Dừng hẳn">■</button></div><div class="progress-row"><span id="currentTime">0:00</span><input id="progress" type="range" min="0" max="100" value="0" aria-label="Tiến trình phát"><span id="duration">0:00</span></div></div><div class="player-extra"><span class="sound-icon">♫</span><input id="volume" type="range" min="0" max="100" value="80" aria-label="Âm lượng"><button id="queueBtn" title="Danh sách phát">☷</button></div></div>
+<div class="modal-backdrop hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><div class="eyebrow muted">THÊM VÀO THƯ VIỆN</div><h2 id="modalTitle">Thêm link YouTube</h2></div><button class="round-btn" id="closeModal" aria-label="Đóng">×</button></div><form id="youtubeForm"><label for="youtubeUrl">Đường dẫn video hoặc link youtu.be</label><input id="youtubeUrl" type="url" placeholder="https://www.youtube.com/watch?v=…" required><label for="youtubeName">Tên bài (không bắt buộc)</label><input id="youtubeName" placeholder="Tên bài hát"><p class="form-help">Video sẽ phát trong trình phát nhúng chính thức. Quảng cáo và các giới hạn phát nền do YouTube kiểm soát.</p><button class="primary full" type="submit">Thêm vào thư viện</button></form></div></div>
+<input id="fileInput" type="file" accept="audio/*,video/*,.mp3,.m4a,.wav,.ogg,.flac,.aac,.opus,.wma,.mp4,.m4v,.webm,.mov,.mkv,.3gp,.avi" multiple hidden>
+<div id="youtubeStage" class="youtube-stage hidden"><div class="stage-head"><b>Đang phát từ YouTube</b><button id="closeYoutube" class="round-btn">×</button></div><div id="youtubePlayer"></div><p>Trình phát YouTube chính thức · Quảng cáo và giới hạn phát do YouTube kiểm soát.</p></div>
+<audio id="audio" preload="metadata"></audio><video id="video" class="local-video hidden" controls playsinline preload="metadata" aria-label="Video trong thư viện"></video>
+<script src="app.js"></script><script src="https://www.youtube.com/iframe_api" async></script>
+</body></html>
