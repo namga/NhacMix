@@ -1,18 +1,23 @@
 {
   "name": "nhacmix-player",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
-  "description": "NhacMix music player with YouTube, public audio, web music links and library/playlist removal",
+  "description": "NhacMix player with local media playlists, website links and native Android media controls",
   "scripts": {
-    "start": "npx serve www",
-    "android:sync": "cap sync android"
+    "start": "npm run build:bridge && npx serve www",
+    "android:sync": "npm run build:bridge && cap sync android",
+    "patch:android-media": "python3 scripts/patch-android-media.py",
+    "build:bridge": "esbuild scripts/native-bridge.js --bundle --format=iife --platform=browser --target=es2020 --outfile=www/cap-bridge.bundle.js",
+    "build": "npm run build:bridge"
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",
-    "@capacitor/core": "^6.2.1"
+    "@capacitor/core": "^6.2.1",
+    "@capacitor/browser": "^6.0.4"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.2.1",
-    "serve": "^14.2.4"
+    "serve": "^14.2.4",
+    "esbuild": "^0.24.2"
   }
 }

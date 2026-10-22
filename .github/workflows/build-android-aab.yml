@@ -5,6 +5,7 @@ on:
     branches: [main, master]
     paths:
       - 'www/**'
+      - 'scripts/**'
       - 'assets/**'
       - 'package.json'
       - 'capacitor.config.json'
@@ -25,8 +26,12 @@ jobs:
           java-version: '17'
       - name: Install dependencies
         run: npm install
+      - name: Build Capacitor JavaScript bridge
+        run: npm run build:bridge
       - name: Generate Android project
         run: npx cap add android
+      - name: Add native Android media session and controls
+        run: python3 scripts/patch-android-media.py
       - name: Configure app icon assets
         run: |
           npm install --no-save @capacitor/assets
