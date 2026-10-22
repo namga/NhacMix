@@ -1,4 +1,4 @@
-# NhacMix 1.3 — Android + Web/PWA
+# NhacMix 1.4 — Android + Web/PWA
 
 Ứng dụng tiếng Việt kết hợp link YouTube qua trình phát chính thức và thư viện âm thanh/video do người dùng chọn trên thiết bị.
 
@@ -80,3 +80,10 @@ Workflow sẽ dừng nếu chưa có secrets hợp lệ. Đây là cấu hình b
 - `assets/`: icon và splash cho Android.
 - `.github/workflows/build-apk.yml`: APK debug.
 - `.github/workflows/build-android-aab.yml`: AAB release ký bằng GitHub Secrets.
+
+
+## NhacMix 1.4 — link trang nhạc và xóa bài
+- Thêm mục **Link trang web nhạc** để lưu URL trang bài hát (ví dụ Zing MP3) vào thư viện và playlist. Khi phát, app mở website chính thức của nhà cung cấp; không trích xuất luồng âm thanh hoặc bỏ qua cơ chế nhúng/đăng nhập/quảng cáo của website. Phát nền và điều khiển media phụ thuộc website đó.
+- Nút **×** trên từng bài: trong thư viện sẽ xóa bài khỏi thư viện, mọi playlist, yêu thích, lịch sử và xóa blob cục bộ nếu có. Trong màn Playlist, nút **×** chỉ bỏ bài khỏi playlist, giữ bản nhạc trong thư viện.
+- Nút **Xóa playlist** xóa playlist đang hiển thị, không xóa các file nhạc trong thư viện.
+- Zing MP3 có thể chặn phát nhúng; URL trang bài hát không phải URL MP3 trực tiếp. Muốn phát ngay trong trình phát NhacMix cần URL audio trực tiếp được nhà cung cấp cho phép hoặc tích hợp chính thức.

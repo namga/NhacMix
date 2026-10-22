@@ -1,8 +1,8 @@
 {
   "name": "nhacmix-player",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
-  "description": "NhacMix player with official YouTube, public audio URLs and permitted MP4-to-MP3 conversion",
+  "description": "NhacMix music player with YouTube, public audio, web music links and library/playlist removal",
   "scripts": {
     "start": "npx serve www",
     "android:sync": "cap sync android"
