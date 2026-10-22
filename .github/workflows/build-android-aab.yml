@@ -1,4 +1,4 @@
-name: Build NhacMix signed Android AAB
+name: Build NhacMix signed Android AAB v1.5.3
 on:
   workflow_dispatch:
   push:
@@ -80,9 +80,11 @@ jobs:
         run: chmod +x gradlew && ./gradlew bundleRelease
       - name: Verify bundle exists
         run: test -s android/app/build/outputs/bundle/release/app-release.aab
+      - name: Rename AAB with app version
+        run: cp android/app/build/outputs/bundle/release/app-release.aab NhacMix-v1.5.3-versionCode16-release.aab
       - uses: actions/upload-artifact@v4
         with:
-          name: NhacMix-release-signed-aab
-          path: android/app/build/outputs/bundle/release/app-release.aab
+          name: NhacMix-v1.5.3-versionCode16-release-AAB
+          path: NhacMix-v1.5.3-versionCode16-release.aab
           if-no-files-found: error
           retention-days: 30

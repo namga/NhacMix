@@ -65,3 +65,9 @@ Actions → **Build NhacMix signed Android AAB** → Run workflow. Khi thành c�
 - `.github/workflows/build-android-aab.yml`: AAB release ký bằng GitHub Secrets.
 
 **Trạng thái:** đã kiểm tra cú pháp JavaScript và Python, nhưng chưa chạy build Gradle hoặc kiểm thử trên thiết bị Android thật trong môi trường này.
+
+
+## Phiên bản 1.5.3
+- Chỉ tạo MediaSession Android cho file âm thanh trong thiết bị (`type=local`, không phải video).
+- Link/video YouTube không tạo player media nền của NhacMix; khi chuyển sang YouTube sẽ dừng phiên media native của file nhạc trước đó.
+- APK CI được xuất tên `NhacMix-v1.5.3-versionCode16-debug.apk`; AAB release nếu cấu hình đủ khóa ký sẽ có tên `NhacMix-v1.5.3-versionCode16-release.aab`.

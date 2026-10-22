@@ -1,4 +1,4 @@
-name: Build NhacMix Android APK
+name: Build NhacMix Android APK v1.5.3
 on:
   workflow_dispatch:
   push:
@@ -45,10 +45,12 @@ jobs:
       - name: Build debug APK
         working-directory: android
         run: chmod +x gradlew && ./gradlew assembleDebug
+      - name: Rename APK with app version
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk NhacMix-v1.5.3-versionCode16-debug.apk
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: NhacMix-debug-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: NhacMix-v1.5.3-versionCode16-debug-APK
+          path: NhacMix-v1.5.3-versionCode16-debug.apk
           if-no-files-found: error
           retention-days: 14

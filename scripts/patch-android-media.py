@@ -139,6 +139,6 @@ manifest.write_text(s)
 # MediaSessionCompat dependency
 build = root / 'app/build.gradle'; s = build.read_text()
 if 'androidx.media:media:' not in s: s = s.replace('dependencies {', 'dependencies {\n    implementation "androidx.media:media:1.7.0"\n', 1)
-s = re.sub(r'versionCode\s+\d+', 'versionCode 15', s, count=1)
-s = re.sub(r'versionName\s+"[^"]+"', 'versionName "1.5.0"', s, count=1)
+s = re.sub(r'versionCode\s+\d+', 'versionCode 16', s, count=1)
+s = re.sub(r'versionName\s+"[^"]+"', 'versionName "1.5.3"', s, count=1)
 build.write_text(s)
