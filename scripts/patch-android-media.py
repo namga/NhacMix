@@ -43,7 +43,9 @@ public class NhacMixMediaPlugin extends Plugin {
     ContextCompat.startForegroundService(getContext(), i); call.resolve();
   }
   @PluginMethod public void stop(PluginCall call) {
-    getContext().startService(new Intent(getContext(), NhacMixMediaService.class).setAction(NhacMixMediaService.ACTION_STOP)); call.resolve();
+    // Explicitly stop the foreground media service so Android removes its system media card.
+    Intent i = new Intent(getContext(), NhacMixMediaService.class).setAction(NhacMixMediaService.ACTION_STOP);
+    getContext().startService(i); call.resolve();
   }
   private void ensureNotificationPermission() {
     if (Build.VERSION.SDK_INT >= 33 && getContext().checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -83,24 +85,35 @@ public class NhacMixMediaService extends Service {
     session.setCallback(new MediaSessionCompat.Callback() {
       @Override public void onPlay(){dispatch("play");playing=true;refresh();}
       @Override public void onPause(){dispatch("pause");playing=false;refresh();}
-      @Override public void onStop(){dispatch("stop");playing=false;stopForeground(true);stopSelf();}
+      @Override public void onStop(){dispatch("stop");playing=false;clearSessionAndStop();}
       @Override public void onSkipToNext(){dispatch("next");}
       @Override public void onSkipToPrevious(){dispatch("previous");}
     }); session.setActive(true);
   }
   @Override public int onStartCommand(Intent intent,int flags,int startId) {
     if(intent==null){stopSelf();return START_NOT_STICKY;} String action=intent.getAction();
-    if(ACTION_STOP.equals(action)){if(intent.getBooleanExtra("fromNotification",false))dispatch("stop");playing=false;if(session!=null){session.setActive(false);session.release();session=null;}stopForeground(true);stopSelf();return START_NOT_STICKY;}
+    if(ACTION_STOP.equals(action)){if(intent.getBooleanExtra("fromNotification",false))dispatch("stop");playing=false;clearSessionAndStop();return START_NOT_STICKY;}
     if(ACTION_PLAY.equals(action)){dispatch("play");playing=true;} else if(ACTION_PAUSE.equals(action)){dispatch("pause");playing=false;} else if(ACTION_NEXT.equals(action)){dispatch("next");} else if(ACTION_PREVIOUS.equals(action)){dispatch("previous");}
     else if(ACTION_UPDATE.equals(action)){if(intent.hasExtra("title"))title=intent.getStringExtra("title");if(intent.hasExtra("artist"))artist=intent.getStringExtra("artist");playing=intent.getBooleanExtra("playing",playing);}
     refresh(); return START_STICKY;
+  }
+  private void clearSessionAndStop(){
+    // Mark the session stopped before releasing it; cancel the notification explicitly.
+    if(session!=null){
+      try { session.setPlaybackState(new PlaybackStateCompat.Builder().setActions(0).setState(PlaybackStateCompat.STATE_STOPPED,0,0f).build()); session.setActive(false); } catch(Exception ignored) {}
+      session.release(); session=null;
+    }
+    NotificationManager nm=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+    if(nm!=null)nm.cancel(NOTIFICATION_ID);
+    if(Build.VERSION.SDK_INT>=24)stopForeground(STOP_FOREGROUND_REMOVE);else stopForeground(true);
+    stopSelf();
   }
   private void createChannel(){if(Build.VERSION.SDK_INT>=26){NotificationChannel c=new NotificationChannel(CHANNEL,"NhacMix playback",NotificationManager.IMPORTANCE_LOW);c.setDescription("Điều khiển phát nhạc NhacMix");((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(c);}}
   private PendingIntent actionIntent(String action,int request){Intent i=new Intent(this,NhacMixMediaService.class).setAction(action);if(ACTION_STOP.equals(action))i.putExtra("fromNotification",true);int flags=PendingIntent.FLAG_UPDATE_CURRENT|(Build.VERSION.SDK_INT>=23?PendingIntent.FLAG_IMMUTABLE:0);return PendingIntent.getService(this,request,i,flags);}
   private void refresh(){if(session==null)return;session.setMetadata(new MediaMetadataCompat.Builder().putString(MediaMetadataCompat.METADATA_KEY_TITLE,title).putString(MediaMetadataCompat.METADATA_KEY_ARTIST,artist).putString(MediaMetadataCompat.METADATA_KEY_ALBUM,"NhacMix").build());long actions=PlaybackStateCompat.ACTION_PLAY|PlaybackStateCompat.ACTION_PAUSE|PlaybackStateCompat.ACTION_PLAY_PAUSE|PlaybackStateCompat.ACTION_STOP|PlaybackStateCompat.ACTION_SKIP_TO_NEXT|PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS;session.setPlaybackState(new PlaybackStateCompat.Builder().setActions(actions).setState(playing?PlaybackStateCompat.STATE_PLAYING:PlaybackStateCompat.STATE_PAUSED,PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN,playing?1f:0f).build());NotificationCompat.Builder b=new NotificationCompat.Builder(this,CHANNEL).setSmallIcon(android.R.drawable.ic_media_play).setContentTitle(title).setContentText(artist).setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setOnlyAlertOnce(true).setOngoing(playing).addAction(android.R.drawable.ic_media_previous,"Trước",actionIntent(ACTION_PREVIOUS,1)).addAction(playing?android.R.drawable.ic_media_pause:android.R.drawable.ic_media_play,playing?"Tạm dừng":"Phát",actionIntent(playing?ACTION_PAUSE:ACTION_PLAY,2)).addAction(android.R.drawable.ic_media_next,"Tiếp",actionIntent(ACTION_NEXT,3)).addAction(android.R.drawable.ic_menu_close_clear_cancel,"Dừng",actionIntent(ACTION_STOP,5)).setStyle(new MediaStyle().setMediaSession(session.getSessionToken()).setShowActionsInCompactView(0,1,2));Intent launch=getPackageManager().getLaunchIntentForPackage(getPackageName());if(launch!=null){PendingIntent content=PendingIntent.getActivity(this,4,launch,PendingIntent.FLAG_UPDATE_CURRENT|(Build.VERSION.SDK_INT>=23?PendingIntent.FLAG_IMMUTABLE:0));b.setContentIntent(content);}startForeground(NOTIFICATION_ID,b.build());}
   private static void dispatch(String action){NhacMixMediaPlugin.dispatch(action);}
   @Override public IBinder onBind(Intent intent){return null;}
-  @Override public void onDestroy(){if(session!=null){session.setActive(false);session.release();session=null;}super.onDestroy();}
+  @Override public void onDestroy(){if(session!=null){try{session.setPlaybackState(new PlaybackStateCompat.Builder().setActions(0).setState(PlaybackStateCompat.STATE_STOPPED,0,0f).build());session.setActive(false);}catch(Exception ignored){}session.release();session=null;}NotificationManager nm=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);if(nm!=null)nm.cancel(NOTIFICATION_ID);super.onDestroy();}
 }
 '''.replace('PACKAGE_NAME', package)
 (java_dir / 'NhacMixMediaService.java').write_text(service)

@@ -1,6 +1,6 @@
 {
   "name": "nhacmix-player",
-  "version": "1.5.0",
+  "version": "1.5.2",
   "private": true,
   "description": "NhacMix player with local media playlists, website links and native Android media controls",
   "scripts": {
